@@ -1,0 +1,12 @@
+spring:
+  application.name: coffeeMachine
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres
+    name: postgres
+    password: 1234
+    driver-class-name: org.postgresql.Driver
+  flyway:
+    url: jdbc:postgresql://localhost:5432/postgres
+    user: postgres
+    password: 1234
+    locations: filesystem:src/main/java/ru/coffee/evstigneev/spring/coffeemachine/infrastructure/db/migration
