@@ -1,5 +1,8 @@
-package ru.coffee.evstigneev.spring.coffeemachine.domain.exception;
+package ru.coffee.evstigneev.spring.coffeemachine.domain.messages.exception;
 
+import lombok.Getter;
+
+@Getter
 public class BusinessException extends RuntimeException {
     private final BusinessError error;
 
@@ -8,7 +11,4 @@ public class BusinessException extends RuntimeException {
         this.error = error;
     }
 
-    public BusinessError getError() {
-        return error;
-    }
 }

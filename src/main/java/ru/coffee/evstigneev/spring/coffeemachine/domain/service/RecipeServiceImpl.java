@@ -1,12 +1,10 @@
 package ru.coffee.evstigneev.spring.coffeemachine.domain.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import ru.coffee.evstigneev.spring.coffeemachine.domain.entity.RecipeIngredient;
-import ru.coffee.evstigneev.spring.coffeemachine.domain.exception.BusinessError;
-import ru.coffee.evstigneev.spring.coffeemachine.domain.exception.BusinessException;
+import ru.coffee.evstigneev.spring.coffeemachine.domain.messages.exception.BusinessError;
+import ru.coffee.evstigneev.spring.coffeemachine.domain.messages.exception.BusinessException;
 import ru.coffee.evstigneev.spring.coffeemachine.domain.repository.RecipeIngredientRepository;
 import ru.coffee.evstigneev.spring.coffeemachine.infrastructure.dto.RecipeIngredientDtoRequest;
 

@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.coffee.evstigneev.spring.coffeemachine.domain.entity.DrinkType;
+import ru.coffee.evstigneev.spring.coffeemachine.domain.messages.exception.BusinessError;
+import ru.coffee.evstigneev.spring.coffeemachine.domain.messages.success.SuccessMessage;
 import ru.coffee.evstigneev.spring.coffeemachine.domain.service.DrinkService;
 
 import java.util.List;
@@ -20,7 +22,6 @@ public class DrinkController {
     private final DrinkService drinkService;
 
     @GetMapping("allType")
-    // TODO: Добавить проверку доступных напитков по рецептам
     @Operation(summary = "Получить все виды напитков", description = "Возвращает список всех видов напитков")
     public List<DrinkType> getDrinks() {
         return drinkService.getDrinksType();
@@ -41,7 +42,11 @@ public class DrinkController {
     @GetMapping("generateDrink")
     @Operation(summary = "Приготовление напитка", description = "Приготовление напитка по идентификатору его вида")
     public ResponseEntity<String> generateDrink(@RequestParam("id") Long id) {
-        return drinkService.generateDrink(id);
+        if (!drinkService.generateDrink(id)) {
+            return new ResponseEntity<>(BusinessError.DRINK_NOT_READY.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+
+        return new ResponseEntity<>(SuccessMessage.DRINK_DONE.getMessage(), HttpStatus.ACCEPTED);
     }
 
     @PostMapping
@@ -51,6 +56,5 @@ public class DrinkController {
         return drinkService.createDrinkType(name);
     }
 
-    // TODO: Добавить удаление типов
 
 }

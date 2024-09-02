@@ -2,10 +2,9 @@ package ru.coffee.evstigneev.spring.coffeemachine.domain.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import ru.coffee.evstigneev.spring.coffeemachine.domain.entity.Ingredient;
 import ru.coffee.evstigneev.spring.coffeemachine.domain.entity.RecipeIngredient;
-import ru.coffee.evstigneev.spring.coffeemachine.domain.exception.BusinessError;
-import ru.coffee.evstigneev.spring.coffeemachine.domain.exception.BusinessException;
 import ru.coffee.evstigneev.spring.coffeemachine.domain.repository.IngredientRepository;
 
 import java.util.ArrayList;
@@ -18,11 +17,13 @@ import java.util.stream.Collectors;
 public class IngredientServiceImpl implements IngredientService {
 
     private final IngredientRepository ingredientRepository;
-    private final RecipeServiceImpl recipeServiceImpl;
+    private final RecipeService recipeService;
 
     public List<Ingredient> checkIngredients(long id) {
         // Получение списка RecipeIngredient по drinkTypeId
-        List<RecipeIngredient> recipeIngredients = recipeServiceImpl.findRecipeByDrinkTypeId(id);
+        List<RecipeIngredient> recipeIngredients = recipeService.findRecipeByDrinkTypeId(id);
+
+        if (CollectionUtils.isEmpty(recipeIngredients)) return null;
 
         // Извлечение идентификаторов ингредиентов рецепта
         List<Long> recipeIngredientIds = recipeIngredients.stream()
@@ -48,11 +49,8 @@ public class IngredientServiceImpl implements IngredientService {
                     .filter(ingredient -> ingredient.getId() == (ingredientId))
                     .findFirst().orElse(null);
 
-            if (ingredientStorageUpdate == null)
-                throw new BusinessException(BusinessError.INGREDIENT_NOT_FOUND);
-
-            if (ingredientStorageUpdate.getQuantity() < requiredQuantity) {
-                throw new BusinessException(BusinessError.INGREDIENT_NOT_ENOUGH); // Не хватает ингредиента или его количества
+            if (ingredientStorageUpdate == null || ingredientStorageUpdate.getQuantity() < requiredQuantity) {
+                return null; // Не хватает ингредиента или его количества
             }
 
             // Обновление количества ингредиентов в хранилище
@@ -69,10 +67,5 @@ public class IngredientServiceImpl implements IngredientService {
 
     public void saveIngredients(List<Ingredient> ingredients) {
         ingredientRepository.saveAll(ingredients);
-    }
-
-    @Override
-    public boolean checkIngredientExists(long ingredientId) {
-        return ingredientRepository.existsById(ingredientId);
     }
 }

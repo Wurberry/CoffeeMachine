@@ -9,4 +9,4 @@ spring:
     url: jdbc:postgresql://localhost:5432/postgres
     user: postgres
     password: 1234
-    locations: filesystem:src/main/java/ru/coffee/evstigneev/spring/coffeemachine/infrastructure/db/migration
+    locations: classpath:db/migration

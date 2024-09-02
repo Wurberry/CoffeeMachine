@@ -13,6 +13,4 @@ public interface IngredientService {
     List<Ingredient> getIngredients();
 
     void saveIngredients(List<Ingredient> ingredients);
-
-    boolean checkIngredientExists(long ingredientId);
 }
